@@ -7,13 +7,29 @@ const validateRequest = (schema) => {
         query: req.query,
       });
 
-      req.body = parsed.body;
-      req.params = parsed.params;
-      req.query = parsed.query;
+      // 1. Reassign body if validated
+      if (parsed.body) {
+        req.body = parsed.body;
+      }
 
-      next();
+      // 2. Safely merge params without breaking prototypes
+      if (parsed.params && Object.keys(parsed.params).length > 0) {
+        Object.assign(req.params, parsed.params);
+      }
+
+      // 3. Safely override query getters using Object.defineProperty
+      if (parsed.query && Object.keys(parsed.query).length > 0) {
+        Object.defineProperty(req, "query", {
+          value: parsed.query,
+          writable: true,
+          configurable: true,
+          enumerable: true,
+        });
+      }
+
+      return next();
     } catch (error) {
-      next(error);
+      return next(error);
     }
   };
 };

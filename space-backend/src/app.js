@@ -7,7 +7,7 @@ import cors from "cors";
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import requestLogger from "./middlewares/requestLogger.middleware.js";
-
+import authModule from "./modules/auth/index.js";
 const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
@@ -24,6 +24,8 @@ app.get("/", (req, res) => {
     message: "Welcome to Space APP",
   });
 });
+
+app.use("/api/v1/auth", authModule.routes);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

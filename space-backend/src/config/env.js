@@ -10,6 +10,7 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string(),
   JWT_REFRESH_SECRET: z.string(),
   JWT_REFRESH_EXPIRES_IN: z.string(),
+  GOOGLE_CLIENT_ID: z.string(),
 });
 
 const parsed = envSchema.safeParse(process.env);

@@ -4,20 +4,14 @@ const requestLogger = (req, res, next) => {
   const start = Date.now();
 
   res.on("finish", () => {
-    logger.info({
-      method: req.method,
-
-      url: req.originalUrl,
-
-      status: res.statusCode,
-
-      duration: `${Date.now() - start} ms`,
-
-      ip: req.ip,
-    });
+    const duration = Date.now() - start;
+    const clientIp = req.ip || req.connection?.remoteAddress || "127.0.0.1";
+    logger.info(
+      `${req.method} ${req.originalUrl} | Status: ${res.statusCode} | Duration: ${duration}ms | IP: ${clientIp}`,
+    );
   });
 
-  next();
+  return next();
 };
 
 export default requestLogger;
