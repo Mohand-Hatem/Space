@@ -26,6 +26,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/auth", authModule.routes);
+app.use("/api/v1/workspaces", workspacesModule.routes);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
